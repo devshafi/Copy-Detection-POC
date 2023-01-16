@@ -122,10 +122,10 @@ export default function CopyDetectForm() {
                         HTML similarity: {data?.html_similarity}%
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                        CSS similarity: {data?.css_similarity}%
+                        CSS (css,scss,sass) similarity: {data?.css_similarity}%
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                        JS similarity: {data?.js_similarity}%
+                        JS (js,jsx,tsx) similarity: {data?.js_similarity}%
                     </Typography>
                     <Typography variant="h6" gutterBottom>
                         Weighted average similarity: {data?.weighted_avg_similarity}%
