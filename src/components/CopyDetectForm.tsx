@@ -40,7 +40,6 @@ type DuplicationResult = {
 async function fetchDuplicationResult(value: FormSchema): Promise<DuplicationResult> {
 
     console.log('function is called',value);
-    const body = { git_repo_url: "https://github.com/devshafi/hr-monitor-client.git" }
     const res = await axios.post('https://8d2d-27-147-226-162.in.ngrok.io/check-duplication', value)
     console.log('fetchDuplicationResult response ===>', res)
     return res.data;
@@ -80,7 +79,7 @@ export default function CopyDetectForm() {
                             onSubmit={methods.handleSubmit(onSubmitHandler)}
                         >
                             <Typography variant="h6" >
-                                Enter git repository URL below to check duplication
+                                Enter a react public git repository URL to check duplication (private repo is not supported yet) 
                             </Typography>
                             <FormInput
                                 label='Enter Git repo uRL'
