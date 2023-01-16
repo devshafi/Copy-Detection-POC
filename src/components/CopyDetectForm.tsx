@@ -39,7 +39,7 @@ type DuplicationResult = {
 
 async function fetchDuplicationResult(value: FormSchema): Promise<DuplicationResult> {
 
-    console.log('function is called',value);
+    console.log('function is called', value);
     const res = await axios.post('https://8d2d-27-147-226-162.in.ngrok.io/check-duplication', value)
     console.log('fetchDuplicationResult response ===>', res)
     return res.data;
@@ -79,7 +79,7 @@ export default function CopyDetectForm() {
                             onSubmit={methods.handleSubmit(onSubmitHandler)}
                         >
                             <Typography variant="h6" >
-                                Enter a react public git repository URL to check duplication (private repo is not supported yet) 
+                                Enter a react public git repository URL to check duplication (private repo is not supported yet)
                             </Typography>
                             <FormInput
                                 label='Enter Git repo uRL'
@@ -104,7 +104,7 @@ export default function CopyDetectForm() {
                 direction="column"
                 justifyContent="center"
                 alignItems="center">
-                    Preparing report....
+                Preparing report....
             </Stack>}
             {data && !isLoading && <Stack
                 direction="column"
@@ -133,8 +133,15 @@ export default function CopyDetectForm() {
                     <Typography variant="h6" gutterBottom>
                         Duplication probability: {data?.copy_probability}
                     </Typography>
-
                 </Paper>
+
+                <Typography variant="caption" >
+                    How probability is calculated: if weighted similarity is <b>less than 30</b>, duplication probability is <b>low</b>. <b>30-50 medium</b>, <b>50-70 high</b> and <b>more than 70 is extreme</b>. It can be modified based on our requirements
+                </Typography>
+                <Typography variant="caption" >
+                    How weighted similarity is calculated: html priority 10%, css priority 20% and js priority 70%. It can be modified based on our requirements.
+                </Typography>
+
             </Stack>}
 
 
