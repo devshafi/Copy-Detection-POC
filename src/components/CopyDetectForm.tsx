@@ -10,6 +10,10 @@ import FormInput from './FormInput';
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios';
 
+import { DuplicationResult } from "../types/resultTypes"
+import { Card, List, ListItem, ListItemText } from '@mui/material';
+import moment from 'moment';
+
 
 // ? Login Schema with Zod
 const duplicateFormSchema = object(
@@ -27,15 +31,15 @@ const defaultValues: FormSchema = {
     git_repo_url: ""
 };
 
-type DuplicationResult = {
-    project_name: string,
-    highest_matched_with: string,
-    copy_probability: string,
-    html_similarity: number,
-    css_similarity: number,
-    weighted_avg_similarity: number,
-    js_similarity: 4
-}
+// type DuplicationResult = {
+//     project_name: string,
+//     highest_matched_with: string,
+//     copy_probability: string,
+//     html_similarity: number,
+//     css_similarity: number,
+//     weighted_avg_similarity: number,
+//     js_similarity: 4
+// }
 
 async function fetchDuplicationResult(value: FormSchema): Promise<DuplicationResult> {
 
@@ -106,46 +110,86 @@ export default function CopyDetectForm() {
                 alignItems="center">
                 Preparing report....
             </Stack>}
-            {data && !isLoading && <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Paper sx={{ m: 2, p: 2 }}>
-                    <Typography variant="h6" gutterBottom>
-                        Project being tested: {data?.project_name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Highest matched with: {data?.highest_matched_with}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        HTML similarity: {data?.html_similarity}%
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        CSS (css,scss,sass) similarity: {data?.css_similarity}%
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        JS (js,jsx,tsx) similarity: {data?.js_similarity}%
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Weighted average similarity: {data?.weighted_avg_similarity}%
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Duplication probability: {data?.copy_probability}
-                    </Typography>
-                </Paper>
 
-                <Typography variant="caption" >
-                    How probability is calculated: if weighted similarity is <b>less than 30</b>, duplication probability is <b>low</b>. <b>30-50 medium</b>, <b>50-70 high</b> and <b>more than 70 is extreme</b>. It can be modified based on our requirements
-                </Typography>
-                <Typography variant="caption" >
-                    How weighted similarity is calculated: html priority 10%, css priority 20% and js priority 70%. It can be modified based on our requirements.
-                </Typography>
+            {data && !isLoading &&
 
-            </Stack>}
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+
+                    <Stack
+                        direction="row"
+                      
+                    >
+                        <Paper sx={{ m: 2, p: 2 }}>
+                            <Typography variant="h6" gutterBottom>
+                                Project being tested: {data?.highest_match.project_name}
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                Highest matched with: {data?.highest_match.highest_matched_with}
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                HTML similarity: {data?.highest_match.html_similarity}%
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                CSS (css,scss,sass) similarity: {data?.highest_match.css_similarity}%
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                JS (js,jsx,tsx) similarity: {data?.highest_match.js_similarity}%
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                Weighted average similarity: {data?.highest_match.weighted_avg_similarity}%
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                Duplication probability: {data?.highest_match.copy_probability}
+                            </Typography>
+                        </Paper>
+
+                        <Paper sx={{ m: 2, p: 2 }}>
+                            <Typography variant="h6" gutterBottom>
+                                Repo Owner: {data?.repo_info.author_info.repo_owner}
+                            </Typography>
+                            <Typography variant="h6" gutterBottom>
+                                Repo Owner Email: {data?.repo_info.author_info.repo_owner_email}
+                            </Typography>
+
+                            <Typography variant="h5" gutterBottom>
+
+                                Latest {data.repo_info.latest_commits.length} commit(s) :
+                                {
+                                    <List>
+                                        {
+                                            data.repo_info.latest_commits.map(commit => (
+
+                                                <ListItem>
+
+                                                    <ListItemText primary={commit.commit_message} secondary={moment(commit.commit_time).format("LLL")} />
+                                                </ListItem>
+                                            ))
+
+                                        }
+
+                                    </List>
+
+                                }
+                            </Typography>
+
+                        </Paper>
+
+                    </Stack>
 
 
 
+                    <Typography variant="caption" >
+                        How probability is calculated: if weighted similarity is <b>less than 20</b>, duplication probability is <b>low</b>. <b>20-50 medium</b>, <b>50-70 high</b> and <b>more than 70 is extreme</b>. It can be modified based on our requirements
+                    </Typography>
+                    <Typography variant="caption" >
+                        How weighted similarity is calculated: html priority 10%, css priority 20% and js priority 70%. It can be modified based on our requirements.
+                    </Typography>
+
+                </Stack>}
 
 
         </Box>
