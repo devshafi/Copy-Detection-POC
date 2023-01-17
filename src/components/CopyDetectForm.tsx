@@ -11,8 +11,9 @@ import { useMutation } from '@tanstack/react-query'
 import axios from 'axios';
 
 import { DuplicationResult } from "../types/resultTypes"
-import { Card, List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 import moment from 'moment';
+import BorderLinearProgress from './BorderLinearProgress';
 
 
 // ? Login Schema with Zod
@@ -44,7 +45,7 @@ const defaultValues: FormSchema = {
 async function fetchDuplicationResult(value: FormSchema): Promise<DuplicationResult> {
 
     console.log('function is called', value);
-    const res = await axios.post('https://8d2d-27-147-226-162.in.ngrok.io/check-duplication', value)
+    const res = await axios.post('https://9b06-27-147-226-162.in.ngrok.io/check-duplication', value)
     console.log('fetchDuplicationResult response ===>', res)
     return res.data;
 }
@@ -83,7 +84,7 @@ export default function CopyDetectForm() {
                             onSubmit={methods.handleSubmit(onSubmitHandler)}
                         >
                             <Typography variant="h6" >
-                                Enter a react public git repository URL to check duplication (private repo is not supported yet)
+                                Enter a react git repository URL to check duplication
                             </Typography>
                             <FormInput
                                 label='Enter Git repo uRL'
@@ -121,31 +122,49 @@ export default function CopyDetectForm() {
 
                     <Stack
                         direction="row"
-                      
                     >
                         <Paper sx={{ m: 2, p: 2 }}>
                             <Typography variant="h6" gutterBottom>
                                 Project being tested: {data?.highest_match.project_name}
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant="h6" marginBottom={4}>
                                 Highest matched with: {data?.highest_match.highest_matched_with}
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant="body1" gutterBottom>
                                 HTML similarity: {data?.highest_match.html_similarity}%
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
+
+                            <BorderLinearProgress sx={{ marginBottom: "20px" }} variant="determinate" value={data?.highest_match.html_similarity} />
+                            {/* <span>{data?.highest_match.html_similarity}%</span> */}
+
+
+
+                            <Typography variant="body1" gutterBottom>
                                 CSS (css,scss,sass) similarity: {data?.highest_match.css_similarity}%
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
+                            <BorderLinearProgress sx={{ marginBottom: "20px" }} variant="determinate" value={data?.highest_match.css_similarity} />
+                            {/* <span>{data?.highest_match.css_similarity}%</span> */}
+                            <Typography variant="body1" gutterBottom>
                                 JS (js,jsx,tsx) similarity: {data?.highest_match.js_similarity}%
                             </Typography>
-                            <Typography variant="h6" gutterBottom>
+
+                            <BorderLinearProgress sx={{ marginBottom: "20px" }} variant="determinate" value={data?.highest_match.js_similarity} />
+                            {/* <span>{data?.highest_match.js_similarity}%</span> */}
+
+
+                            <Typography variant="body1" gutterBottom>
                                 Weighted average similarity: {data?.highest_match.weighted_avg_similarity}%
                             </Typography>
+
+                            <BorderLinearProgress sx={{ marginBottom: "20px" }} variant="determinate" value={data?.highest_match.weighted_avg_similarity} />
+                            {/* <span >{data?.highest_match.weighted_avg_similarity}%</span> */}
+
                             <Typography variant="h6" gutterBottom>
-                                Duplication probability: {data?.highest_match.copy_probability}
+                                Overall copy probability: {data?.highest_match.copy_probability}
                             </Typography>
                         </Paper>
+
+
 
                         <Paper sx={{ m: 2, p: 2 }}>
                             <Typography variant="h6" gutterBottom>
@@ -155,16 +174,14 @@ export default function CopyDetectForm() {
                                 Repo Owner Email: {data?.repo_info.author_info.repo_owner_email}
                             </Typography>
 
-                            <Typography variant="h5" gutterBottom>
+                            <Typography variant="h6" gutterBottom>
 
                                 Latest {data.repo_info.latest_commits.length} commit(s) :
                                 {
-                                    <List>
+                                    <List dense>
                                         {
                                             data.repo_info.latest_commits.map(commit => (
-
                                                 <ListItem>
-
                                                     <ListItemText primary={commit.commit_message} secondary={moment(commit.commit_time).format("LLL")} />
                                                 </ListItem>
                                             ))
