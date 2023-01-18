@@ -45,7 +45,7 @@ const defaultValues: FormSchema = {
 async function fetchDuplicationResult(value: FormSchema): Promise<DuplicationResult> {
 
     console.log('function is called', value);
-    const res = await axios.post('https://9b06-27-147-226-162.in.ngrok.io/check-duplication', value)
+    const res = await axios.post('https://frshafi.pythonanywhere.com/check-duplication', value)
     console.log('fetchDuplicationResult response ===>', res)
     return res.data;
 }
